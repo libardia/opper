@@ -23,7 +23,7 @@
 						<manifest>
 							<addClasspath>true</addClasspath>
 							<classpathPrefix>lib/</classpathPrefix>
-							<mainClass>info.tonyl.opper.OpperDemo</mainClass>
+							<mainClass>info.tonyl.opper.demo.OpperDemo</mainClass>
 						</manifest>
 					</archive>
 				</configuration>

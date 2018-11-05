@@ -10,33 +10,63 @@ public class Opper {
 	private static Map<String, Option> options = new HashMap<>();
 	private static List<String> namelessValues = new ArrayList<>();
 
-	public static void register(OptionDefinition... definitions) {
-		for (OptionDefinition def : definitions) {
-			Opper.definitions.add(def);
+	/**
+	 * Registers option definitions by <code>OptionDefinition</code> objects.
+	 * 
+	 * @param def
+	 *            The definition objects to register, as a vararg.
+	 */
+	public static void register(OptionDefinition... def) {
+		for (OptionDefinition d : def) {
+			definitions.add(d);
 		}
 	}
 
-	public static void register(String[] names, boolean hasValue) {
-		register(new OptionDefinition(names, hasValue));
-	}
-
-	public static void register(String name, boolean hasValue) {
-		register(new String[] { name }, hasValue);
-	}
-
-	public static void register(String name) {
-		register(new String[] { name }, false);
-	}
-
+	/**
+	 * Registers one option with all of the given names, set to not take a value.
+	 * The first name given is considered the primary name and is what this option
+	 * should be queried by.
+	 * 
+	 * @param names
+	 *            The names for this option, as a vararg.
+	 */
 	public static void register(String... names) {
+		register(new OptionDefinition(names, false));
+	}
+
+	/**
+	 * Registers one option with all of the given names, set to take a value. The
+	 * first name given is considered the primary name and is what this option
+	 * should be queried by.
+	 * 
+	 * @param names
+	 *            The names for this option, as a vararg.
+	 */
+	public static void registerWithValue(String... names) {
+		register(new OptionDefinition(names, true));
+	}
+
+	/**
+	 * Registers multiple options with one name each, set to not take values.
+	 * 
+	 * @param names
+	 *            The names for for each option, as a vararg.
+	 */
+	public static void registerMultiple(String... names) {
 		for (String name : names) {
-			register(name, false);
+			register(name);
 		}
 	}
 
-	public static void registerMultiple(String all) {
-		for (int i = 0; i < all.length(); i++) {
-			register(all.substring(i, i + 1), false);
+	/**
+	 * Registers multiple options with one name each, set to take values.
+	 * 
+	 * @param names
+	 *            The names for for each option, as a vararg.
+	 */
+	public static void registerMultipleWithValue(String... names) {
+		for (String name : names) {
+			registerWithValue(name);
 		}
 	}
 
@@ -80,6 +110,14 @@ public class Opper {
 		return options.containsKey(name);
 	}
 
+	public static boolean hasValue(String name) {
+		if (isSet(name)) {
+			return options.get(name).hasValue;
+		}
+
+		return false;
+	}
+
 	public static String getValueOf(String name) {
 		Option o = options.get(name);
 		if (o == null) {
@@ -90,10 +128,10 @@ public class Opper {
 	}
 
 	public static String[] getNamelessValues() {
-		return (String[]) namelessValues.toArray();
+		return namelessValues.toArray(new String[0]);
 	}
 
-	public static Map<String, Option> tempGetOptions() {
-		return options;
+	public static String[] getAllSetOptions() {
+		return options.keySet().toArray(new String[0]);
 	}
 }

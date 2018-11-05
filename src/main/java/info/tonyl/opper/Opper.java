@@ -85,7 +85,7 @@ public class Opper {
 					potential.add(arg.substring(i, i + 1));
 				}
 			} else {
-				if (last != null && last.hasValue) {
+				if (last != null && last.hasValue && last.value == null) {
 					last.value = arg;
 				} else {
 					namelessValues.add(arg);
@@ -120,7 +120,7 @@ public class Opper {
 
 	public static String getValueOf(String name) {
 		Option o = options.get(name);
-		if (o == null) {
+		if (o == null || o.value == null) {
 			return "";
 		} else {
 			return o.value;

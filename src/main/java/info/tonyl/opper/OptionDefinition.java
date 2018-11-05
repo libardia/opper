@@ -21,7 +21,7 @@ public class OptionDefinition {
 		Option o = new Option();
 		o.names = names;
 		o.hasValue = hasValue;
-		o.value = "";
+		o.value = null;
 		return o;
 	}
 }

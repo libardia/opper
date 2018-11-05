@@ -16,12 +16,16 @@ public class Opper {
 		}
 	}
 
+	public static void register(String[] names, boolean hasValue) {
+		register(new OptionDefinition(names, hasValue));
+	}
+
 	public static void register(String name, boolean hasValue) {
-		register(new OptionDefinition(name, hasValue));
+		register(new String[] { name }, hasValue);
 	}
 
 	public static void register(String name) {
-		register(new OptionDefinition(name, false));
+		register(new String[] { name }, false);
 	}
 
 	public static void register(String... names) {
@@ -58,12 +62,14 @@ public class Opper {
 				}
 			}
 
-			for (String p : potential) {
+			outermost: for (String p : potential) {
 				for (OptionDefinition def : definitions) {
-					if (p.equals(def.getName())) {
-						last = def.make();
-						options.put(p, last);
-						break;
+					for (String name : def.getNames()) {
+						if (p.equals(name)) {
+							last = def.make();
+							options.put(def.getNames()[0], last);
+							break outermost;
+						}
 					}
 				}
 			}
@@ -85,5 +91,9 @@ public class Opper {
 
 	public static String[] getNamelessValues() {
 		return (String[]) namelessValues.toArray();
+	}
+
+	public static Map<String, Option> tempGetOptions() {
+		return options;
 	}
 }
